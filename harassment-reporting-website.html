@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Harassment Reporting Portal</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #e74c3c;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            margin-top: 0;
+            color: white;
+        }
+        
+        h2 {
+            color: var(--primary-dark);
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+        
+        .section {
+            margin-bottom: rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-danger {
+            background-color: var(--secondary);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+        }
+        
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+        
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .audio-container {
+            border: 1px dashed #ccc;
+            padding: 1rem;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            margin-bottom: 1rem;
+        }
+        
+        .confidential-note {
+            background-color: #fff8e1;
+            padding: 1rem;
+            border-left: 4px solid #ffc107;
+            margin-bottom: 1rem;
+        }
+        
+        .recording {
+            animation: pulse 1.5s infinite;
+            background-color: var(--secondary) !important;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        .progress-bar {
+            height: 40px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0;
+            transition: width 4s;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+        
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            background-color: #f0f0f0;
+            border-right: 1px solid white;
+        }
+        
+        .step.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .step:first-child {
+            border-radius: 4px 0 0 4px;
+        }
+        
+        .step:last-child {
+            border-radius: 0 4px 4px 0;
+            border-right: none;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .form-section {
+            margin-bottom: rem;
+        }
+        
+        .audio-visualizer {
+            height: 60px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .audio-bar {
+            width: 9px;
+            height: 20px;
+            background-color: var(--primary);
+            margin: 0 2px;
+            border-radius: 2px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .success-message h2 {
+            color: var(--success);
+        }
+        
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 2;
+            stroke: #fff;
+            stroke-miterlimit: 10;
+            margin: 1rem auto;
+            box-shadow: inset 0px 0px 0px var(--success);
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+        }
+        
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 2; 
+            stroke-miterlimit: 10;
+            stroke: var(--success);
+            fill: none;
+            animation: stroke .6s cubic-bezier(0.650, 0.000, 0.450, 1.000) forwards;
+        }
+        
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke .3s cubic-bezier(0.650, 0.000, 0.450, 1.000) .8s forwards;
+        }
+        
+        @keyframes stroke {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+        
+        @keyframes scale {
+            0%, 100% {
+                transform: none;
+            }
+            50% {
+                transform: scale3d(1.1, 1.1, 1);
+            }
+        }
+        
+        @keyframes fill {
+            100% {
+                box-shadow: inset 0px 0px 0px 30px var(--success);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Student Harassment Reporting Portal</h1>
+        <p>A safe space to report incidents of harassment</p>
+    </header>
+    
+    <div class="container">
+        <div class="step-indicator">
+            <div class="step active" id="step1-indicator">Information</div>
+            <div class="step" id="step2-indicator">Details</div>
+            <div class="step" id="step3-indicator">Submit</div>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress-bar"></div>
+        </div>
+        
+        <form id="report-form">
+            <!-- Step 1: Basic Information -->
+            <div class="form-section" id="step1">
+                <h2>Report Information</h2>
+                
+                <div class="confidential-note">
+                    <strong>Confidentiality Notice:</strong> Your privacy is important to us. All reports are confidential and will only be shared with the appropriate personnel.
+                </div>
+                
+                <div class="section"> 
+                    <label for="report-type">Type of Harassment:</label>
+                    <select id="report-type" required>
+                        <option value="" disabled selected>Select type of harassment</option>
+                        <option value="verbal">Verbal Harassment</option>
+                        <option value="physical">Physical Harassment</option>
+                        <option value="online">Online/Cyber Harassment</option>
+                        <option value="discrimination">Discrimination</option>
+                        <option value="sexual">Sexual Harassment</option>
+                        <option value="bullying">Bullying</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="section">
+                    <label for="report-location">Where did this occur?</label>
+                    <input type="text" id="report-location" placeholder="Location of incident" required>
+                </div>
+                
+                <div class="section">
+                    <label for="report-date">When did this occur?</label>
+                    <input type="date" id="report-date" required>
+                </div>
+                
+                <div class="section">
+                    <label for="reporter-type">I am a:</label>
+                    <select id="reporter-type" required>
+                        <option value="" disabled selected>Select your role</option>
+                        <option value="victim">Victim of harassment</option>
+                        <option value="witness">Witness to harassment</option>
+                        <option value="concerned">Concerned friend/classmate</option>
+                        <option value="faculty">Faculty/Staff member</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-footer">
+                    <button type="button" class="btn" id="next-to-step2">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Detailed Report -->
+            <div class="form-section hidden" id="step2">
+                <h2>Detailed Report</h2>
+                
+                <div class="section">
+                    <label for="report-details">Please describe the incident in detail:</label>
+                    <textarea id="report-details" placeholder="Provide as much detail as possible about what happened, who was involved, and any other relevant information..."></textarea>
+                </div>
+                
+                <div class="section">
+                    <label for="Audio details">Audio Report (Optional):</label>
+                    <div class="audio-container">
+                        <p>You can also record an audio description of the incident:</p>
+                        
+                        <div class="audio-visualizer" id="audio-visualizer">
+                            <div class="audio-bar"></div>
+                            <div class="audio-bar"></div>
+                            <div class="audio-bar"></div>
+                            <div class="audio-bar"></div>
+                            <div class="audio-bar"></div>
+                            <div class="audio-bar"></div>
+                            <div class="audio-bar"></div>
+                            <div class="audio-bar"></div>
+                            <div class="audio-bar"></div>
+                            <div class="audio-bar"></div>
+                            <div class="audio-bar"></div>
+                            <div class="audio-bar"></div>
+                            <div class="audio-bar"></div>
+                            <div class="audio-bar"></div>
+                            <div class="audio-bar"></div>
+                        </div>
+                        
+                        <div class="audio-controls">
+                            <button type="button" class="btn" id="record-button">Start Recording</button>
+                            <button type="button" class="btn hidden" id="stop-button">Stop Recording</button>
+                            <span id="recording-status">Not recording</span>
+                        </div>
+                        
+                        <div id="audio-playback" class="hidden">
+                            <p>Review your recording:</p>
+                            <audio id="recorded-audio" controls></audio>
+                            <button type="button" class="btn btn-danger" id="delete-recording">Delete & Re-record</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-footer">
+                    <button type="button" class="btn" id="back-to-step1">Back</button>
+                    <button type="button" class="btn" id="next-to-step3">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Contact & Submit -->
+            <div class="form-section hidden" id="step3">
+                <h2>Contact Information</h2>
+                
+                <div class="confidential-note">
+                    <strong>Anonymous Reporting:</strong> Providing your contact information is optional. You can submit an anonymous report if you prefer.
+                </div>
+                
+                <div class="section">
+                    <label for="reporter-name">Your Name (Optional):</label>
+                    <input type="text" id="reporter-name" placeholder="Your name">
+                </div>
+                
+                <div class="section">
+                    <label for="reporter-email">Your Email (Optional):</label>
+                    <input type="email" id="reporter-email" placeholder="Your email address">
+                </div>
+                
+
+
+
+                <div class="section">
+                    <label for="reporter-phone">Your Phone Number (Optional):</label>
+                    <input type="tel" id="reporter-phone" placeholder="Your phone number">
+                </div>
+                
+                <div class="section">
+                    <label for="follow-up">Would you like to be contacted about this report?</label>
+                    <select id="follow-up">
+                        <option value="yes">Yes, please contact me</option>
+                        <option value="no">No, I prefer to remain anonymous</option>
+                    </select>
+                </div>
+                
+                <div class="form-footer">
+                    <button type="button" class="btn" id="back-to-step2">Back</button>
+                    <button type="submit" class="btn btn-success" id="submit-report">Submit Report</button>
+                </div>
+            </div>
+            
+            <!-- Success Message (Hidden initially) -->
+            <div class="success-message hidden" id="success-message">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+                <h2>Report Submitted Successfully</h2>
+                <p>Thank you for your report. Your courage in reporting this incident is appreciated.</p>
+                <p>If you provided contact information, a member of our team will reach out to you soon.</p>
+                <p>Report ID: <strong id="report-id"></strong></p>
+                <button type="button" class="btn" id="new-report">Submit Another Report</button>
+            </div>
+        </form>
+    </div>
+    
+    <footer class="footer">
+        <p>If you are in immediate danger, please call emergency services at 911 or 112(Nigeria).</p>
+        <p>For urgent support, contact the Student Support Hotline: 08060273718</p>
+        <p>&copy; 2025 Student Safety Initiative. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        // DOM Elements
+        const form = document.getElementById('report-form');
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+        const step1Indicator = document.getElementById('step1-indicator');
+        const step2Indicator = document.getElementById('step2-indicator');
+        const step3Indicator = document.getElementById('step3-indicator');
+        const progressBar = document.getElementById('progress-bar');
+        const successMessage = document.getElementById('success-message');
+
+        // Audio recording variables
+        let mediaRecorder;
+        let audioChunks = [];
+        let audioBlob;
+        let audioURL;
+        
+        // Navigation buttons
+        document.getElementById('next-to-step2').addEventListener('click', () => {
+            // Validate step 1
+            const reportType = document.getElementById('report-type').value;
+            const reportLocation = document.getElementById('report-location').value;
+            const reportDate = document.getElementById('report-date').value;
+            const reporterType = document.getElementById('reporter-type').value;
+            
+            if (!reportType || !reportLocation || !reportDate || !reporterType) {
+                alert('Please fill in all required fields before proceeding.');
+                return;
+            }
+            
+            step1.classList.add('hidden');
+            step2.classList.remove('hidden');
+            step1Indicator.classList.remove('active');
+            step2Indicator.classList.add('active');
+            progressBar.style.width = '33%';
+        });
+        
+        document.getElementById('back-to-step1').addEventListener('click', () => {
+            step2.classList.add('hidden');
+            step1.classList.remove('hidden');
+            step2Indicator.classList.remove('active');
+            step1Indicator.classList.add('active');
+            progressBar.style.width = '0%';
+        });
+        
+        document.getElementById('next-to-step3').addEventListener('click', () => {
+            // Validate step 2
+            const reportDetails = document.getElementById('report-details').value;
+            
+            if (!reportDetails) {
+                alert('Please provide details about the incident before proceeding.');
+                return;
+            }
+            
+            step2.classList.add('hidden');
+            step3.classList.remove('hidden');
+            step2Indicator.classList.remove('active');
+            step3Indicator.classList.add('active');
+            progressBar.style.width = '66%';
+        });
+        
+        document.getElementById('back-to-step2').addEventListener('click', () => {
+            step3.classList.add('hidden');
+            step2.classList.remove('hidden');
+            step3Indicator.classList.remove('active');
+            step2Indicator.classList.add('active');
+            progressBar.style.width = '33%';
+            
+        });
+        
+        // Audio recording functionality
+        document.getElementById('record-button').addEventListener('click', startRecording);
+        document.getElementById('stop-button').addEventListener('click', stopRecording);
+        document.getElementById('delete-recording').addEventListener('click', deleteRecording);
+        
+        // Submit form
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Here you would normally send the form data to a server
+            // For demonstration, we'll simulate a successful submission
+            
+            // Generate a random report ID
+            const reportId = 'REP-' + Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('report-id').textContent = reportId;
+            
+            // Hide form and show success message
+            step3.classList.add('hidden');
+            successMessage.classList.remove('hidden');
+            step3Indicator.classList.remove('active');
+            progressBar.style.width = '100%';
+            
+            // Log form data (in a real app, you would send this to the server)
+            const formData = {
+                reportType: document.getElementById('report-type').value,
+                location: document.getElementById('report-location').value,
+                date: document.getElementById('report-date').value,
+                reporterType: document.getElementById('reporter-type').value,
+                details: document.getElementById('report-details').value,
+                name: document.getElementById('reporter-name').value,
+                email: document.getElementById('reporter-email').value,
+                phone: document.getElementById('reporter-phone').value,
+                followUp: document.getElementById('follow-up').value,
+                audioRecording: audioBlob ? true : false
+            };
+            
+            console.log('Form submitted:', formData);
+        });
+        
+        // Reset form for a new report
+        document.getElementById('new-report').addEventListener('click', function() {
+            form.reset();
+            deleteRecording();
+            successMessage.classList.add('hidden');
+            step1.classList.remove('hidden');
+            step1Indicator.classList.add('active');
+            step2Indicator.classList.remove('active');
+            step3Indicator.classList.remove('active');
+            progressBar.style.width = '0%';
+        });
+        
+        // Audio recording functions
+        function startRecording() {
+            // Reset previous recording
+            audioChunks = [];
+            
+            // Request microphone access
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    // Update UI
+                    document.getElementById('record-button').classList.add('hidden');
+                    document.getElementById('stop-button').classList.remove('hidden');
+                    document.getElementById('stop-button').classList.add('recording');
+                    document.getElementById('recording-status').textContent = 'Recording...';
+                    
+                    // Animate audio visualizer
+                    startVisualizerAnimation();
+                    
+                    // Create media recorder
+                    mediaRecorder = new MediaRecorder(stream);
+                    
+                    // Collect audio chunks
+                    mediaRecorder.addEventListener('dataavailable', event => {
+                        audioChunks.push(event.data);
+                    });
+                    
+                    // When recording stops
+                    mediaRecorder.addEventListener('stop', () => {
+                        // Stop all tracks from the stream
+                        stream.getTracks().forEach(track => track.stop());
+                        
+                        // Create audio blob and URL
+                        audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        audioURL = URL.createObjectURL(audioBlob);
+                        
+                        // Update audio player
+                        const audioElement = document.getElementById('recorded-audio');
+                        audioElement.src = audioURL;
+                        
+                        // Show playback controls
+                        document.getElementById('audio-playback').classList.remove('hidden');
+                    });
+                    
+                    // Start recording
+                    mediaRecorder.start();
+                })
+                .catch(error => {
+                    console.error('Error accessing microphone:', error);
+                    alert('Could not access your microphone. Please check your device settings and try again.');
+                });
+        }
+        
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                // Stop recording
+                mediaRecorder.stop();
+                
+                // Update UI
+                document.getElementById('stop-button').classList.add('hidden');
+                document.getElementById('stop-button').classList.remove('recording');
+                document.getElementById('record-button').classList.remove('hidden');
+                document.getElementById('recording-status').textContent = 'Recording complete';
+                
+                // Stop visualizer animation
+                stopVisualizerAnimation();
+            }
+        }
+        
+        function deleteRecording() {
+            // Reset audio data
+            audioChunks = [];
+            audioBlob = null;
+            audioURL = null;
+            
+            // Update UI
+            document.getElementById('audio-playback').classList.add('hidden');
+            document.getElementById('recording-status').textContent = 'Not recording';
+            
+            // Reset audio element
+            const audioElement = document.getElementById('recorded-audio');
+            audioElement.src = '';
+            
+            // Stop visualizer animation
+            stopVisualizerAnimation();
+        }
+        
+        // Audio visualizer animation
+        let visualizerInterval;
+        
+        function startVisualizerAnimation() {
+            const bars = document.querySelectorAll('.audio-bar');
+            
+            visualizerInterval = setInterval(() => {
+                bars.forEach(bar => {
+                    const height = Math.floor(Math.random() * 40) + 5;
+                    bar.style.height = `${height}px`;
+                });
+            }, 100);
+        }
+        
+        function stopVisualizerAnimation() {
+            clearInterval(visualizerInterval);
+            
+            // Reset bars
+            const bars = document.querySelectorAll('.audio-bar');
+            bars.forEach(bar => {
+                bar.style.height = '5px';
+            });
+        }
+
+        
+    </script>
+</body>
+</html>
